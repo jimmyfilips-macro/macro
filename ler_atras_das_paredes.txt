@@ -1,0 +1,76 @@
+$${
+IF(automine2);
+ACHIEVEMENTGET(Assistente OFF,270);UNSET(automine2);
+setlabel(T3,,T3);setlabel(T2,,T2);setlabel(T1,,T1);
+setlabel(Y3,,Y3);setlabel(Y2,,Y2);setlabel(Y1,,Y1);
+setlabel(U3,,U3);setlabel(U2,,U2);setlabel(U1,,U1);
+setlabel(II,,II);setlabel(OO,,OO);setlabel(LT,,LT);
+STOP();
+ELSE;
+ACHIEVEMENTGET(Assistente ON,270);SET(automine2);set(lado);unset(perigo);#nblocos=1;
+endif;
+ 
+DO;
+// ======================================= DIREÇÃO
+&ff = %DIRECTION%;
+ifmatches(%&ff%,N);&ff=NORTH;&fa=SOUTH;&fd=EAST;&fe=WEST;#nx1=1;#nx2=0;#nx3=-1;#nz1=-2;#nz2=-2;#nz3=-2;#nxb=0;#nzb=-1;endif;
+ifmatches(%&ff%,S);&fa=NORTH;&ff=SOUTH;&fe=EAST;&fd=WEST;#nx1=-1;#nx2=0;#nx3=1;#nz1=2;#nz2=2;#nz3=2;#nxb=0;#nzb=1;endif;
+ifmatches(%&ff%,E);&fe=NORTH;&fd=SOUTH;&ff=EAST;&fa=WEST;#nz1=1;#nz2=0;#nz3=-1;#nx1=2;#nx2=2;#nx3=2;#nxb=1;#nzb=0;endif;
+ifmatches(%&ff%,W);&fd=NORTH;&fe=SOUTH;&fa=EAST;&ff=WEST;#nz1=-1;#nz2=0;#nz3=1;#nx1=-2;#nx2=-2;#nx3=-2;#nxb=-1;#nzb=0;endif;
+// ======================================= LEITURA DO TERRENO
+GETIDREL(%#nx1%,2,%#nz1%,#lid1a);GETIDREL(%#nx2%,2,%#nz2%,#lid1b);GETIDREL(%#nx3%,2,%#nz3%,#lid1c);
+GETIDREL(%#nx1%,1,%#nz1%,#lid2a);GETIDREL(%#nx2%,1,%#nz2%,#lid2b);GETIDREL(%#nx3%,1,%#nz3%,#lid2c);
+GETIDREL(%#nx1%,0,%#nz1%,#lid3a);GETIDREL(%#nx2%,0,%#nz2%,#lid3b);GETIDREL(%#nx3%,0,%#nz3%,#lid3c);
+GETIDREL(%#nxb%,-1,%#nzb%,#lid4b);GETIDREL(%#nxb%,2,%#nzb%,#lid5b);
+// ======================================= NOMES
+GETITEMINFO(%#lid1a%,&lid1a);GETITEMINFO(%#lid1b%,&lid1b);GETITEMINFO(%#lid1c%,&lid1c);
+GETITEMINFO(%#lid2a%,&lid2a);GETITEMINFO(%#lid2b%,&lid2b);GETITEMINFO(%#lid2c%,&lid2c);
+GETITEMINFO(%#lid3a%,&lid3a);GETITEMINFO(%#lid3b%,&lid3b);GETITEMINFO(%#lid3c%,&lid3c);
+GETITEMINFO(%#lid4b%,&lid4b);GETITEMINFO(%#lid5b%,&lid5b);
+// ======================================= CORES
+&cor1a=f;&cor2a=f;&cor3a=f;
+&cor1b=f;&cor2b=f;&cor3b=f;
+&cor1c=f;&cor2c=f;&cor3c=f;
+&cor4b=f;&cor5b=f;
+// LAVA
+IF(%#lid1a%=11);&cor1a=4;ENDIF;IF(%#lid1b%=11);&cor1b=4;ENDIF;IF(%#lid1c%=11);&cor1c=4;ENDIF;
+IF(%#lid2a%=11);&cor2a=4;ENDIF;IF(%#lid2b%=11);&cor2b=4;ENDIF;IF(%#lid2c%=11);&cor2c=4;ENDIF;
+IF(%#lid3a%=11);&cor3a=4;ENDIF;IF(%#lid3b%=11);&cor3b=4;ENDIF;IF(%#lid3c%=11);&cor3c=4;ENDIF;
+IF(%#lid4b%=11);&cor4b=4;ENDIF;IF(%#lid5b%=11);&cor5b=4;ENDIF;
+// AGUA
+IF(%#lid1a%=9);&cor1a=3;ENDIF;IF(%#lid1b%=9);&cor1b=3;ENDIF;IF(%#lid1c%=9);&cor1c=3;ENDIF;
+IF(%#lid2a%=9);&cor2a=3;ENDIF;IF(%#lid2b%=9);&cor2b=3;ENDIF;IF(%#lid2c%=9);&cor2c=3;ENDIF;
+IF(%#lid3a%=9);&cor3a=3;ENDIF;IF(%#lid3b%=9);&cor3b=3;ENDIF;IF(%#lid3c%=9);&cor3c=3;ENDIF;
+IF(%#lid4b%=9);&cor4b=3;ENDIF;IF(%#lid5b%=9);&cor5b=3;ENDIF;
+// CASCALHO
+IF(%#lid1a%=13);&cor1a=e;ENDIF;IF(%#lid1b%=13);&cor1b=e;ENDIF;IF(%#lid1c%=13);&cor1c=e;ENDIF;
+IF(%#lid2a%=13);&cor2a=e;ENDIF;IF(%#lid2b%=13);&cor2b=e;ENDIF;IF(%#lid2c%=13);&cor2c=e;ENDIF;
+IF(%#lid3a%=13);&cor3a=e;ENDIF;IF(%#lid3b%=13);&cor3b=e;ENDIF;IF(%#lid3c%=13);&cor3c=e;ENDIF;
+IF(%#lid4b%=13);&cor4b=e;ENDIF;IF(%#lid5b%=13);&cor5b=e;ENDIF;IF(%#lid4b%=0);&cor4b=d;ENDIF;
+// ======================================= LABELS
+setlabel(T3,&%&cor1a%%&lid1a%,T3);setlabel(T2,&%&cor1b%%&lid1b%,T2);setlabel(T1,&%&cor1c%%&lid1c%,T1);
+setlabel(Y3,&%&cor2a%%&lid2a%,Y3);setlabel(Y2,&%&cor2b%%&lid2b%,Y2);setlabel(Y1,&%&cor2c%%&lid2c%,Y1);
+setlabel(U3,&%&cor3a%%&lid3a%,U3);setlabel(U2,&%&cor3b%%&lid3b%,U2);setlabel(U1,&%&cor3c%%&lid3c%,U1);
+setlabel(II,&%&cor4b%%&lid4b%,II);setlabel(OO,&%&cor5b%%&lid5b%,OO);
+//======================================== LEITURA DE CONDIÇÕES
+IF(%#lid4b%=0);#teste=4;&teste=&dQUEDA DETECTADA;
+ 
+ELSEIF((%#lid1a%=11)|(%#lid2a%=11)|(%#lid3a%=11));#teste=1;&teste=&4LAVA DETECTADA;
+ELSEIF((%#lid1b%=11)|(%#lid2b%=11)|(%#lid3b%=11));#teste=1;&teste=&4LAVA DETECTADA;
+ELSEIF((%#lid1c%=11)|(%#lid2c%=11)|(%#lid3c%=11));#teste=1;&teste=&4LAVA DETECTADA;
+ELSEIF((%#lid4b%=11)|(%#lid5b%=11));#teste=1;&teste=&4LAVA DETECTADA;
+ 
+ELSEIF((%#lid1a%=9)|(%#lid2a%=9)|(%#lid3a%=9));#teste=2;&teste=&3AGUA DETECTADA;
+ELSEIF((%#lid1b%=9)|(%#lid2b%=9)|(%#lid3b%=9));#teste=2;&teste=&3AGUA DETECTADA;
+ELSEIF((%#lid1c%=9)|(%#lid2c%=9)|(%#lid3c%=9));#teste=2;&teste=&3AGUA DETECTADA;
+ELSEIF((%#lid4b%=9)|(%#lid5b%=9));#teste=2;&teste=&3AGUA DETECTADA;
+ 
+ELSEIF((%#lid1a%=13)|(%#lid2a%=13)|(%#lid3a%=13));#teste=3;&teste=&eCASCALHO DETECTADO;
+ELSEIF((%#lid1b%=13)|(%#lid2b%=13)|(%#lid3b%=13));#teste=3;&teste=&eCASCALHO DETECTADO;
+ELSEIF((%#lid1c%=13)|(%#lid2c%=13)|(%#lid3c%=13));#teste=3;&teste=&eCASCALHO DETECTADO;
+ELSEIF((%#lid4b%=13)|(%#lid5b%=13));#teste=3;&teste=&eCASCALHO DETECTADO;
+ 
+ELSE;#teste=0;&teste=Setor limpo;ENDIF;
+setlabel(LT,%&teste%,LT);
+LOOP;
+}$$

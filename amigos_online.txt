@@ -1,0 +1,50 @@
+$${
+setlabel(Amg," ",Amg);
+wait(4);
+// Lista de Amigos
+&friendlist=PliBR$|XOwenWinner$|ThiagoSzz$|Yuukoso$;
+
+// Configurações Adicionais
+&inicial=&8Buscando amigos..;
+&online=&7Online's;
+&oncolor=&2;
+&offline=&8Nenhum amigo online;
+
+// Reinicia variáveis
+&prox=;
+&friends=;
+&newplayer=;
+&playerlist=;
+
+setlabel(Amg,"%&inicial%",Amg);
+set(incompleto);
+
+do;
+	FOREACH(players);
+		IFMATCHES(%PLAYERNAME%,%&friendlist%);
+			&newplayer= %PLAYERNAME%; 
+			&playerlist=%&playerlist%%&prox%%&oncolor%%&newplayer%; 
+
+			&prox=\n;
+			if(incompleto);
+				&friends=%&inicial%\n%&oncolor%%&playerlist%;
+				setlabel(Amg,"%&friends%",Amg);
+			endif;
+		endif;
+	NEXT;
+	unset(incompleto);
+
+	&friends=%&online%\n%&oncolor%%&playerlist%;
+	if(%@online%);
+		setlabel(Amg,"%&friends%",Amg);
+	else;
+		setlabel(Amg,,Amg);
+	endif;
+
+	// Reinicia
+	&newplayer=;
+	&playerlist=;
+	&friends=;
+	&prox=;
+loop;
+}$$
